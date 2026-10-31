@@ -1,4 +1,5 @@
-import { useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Check, ChevronRight, CircleHelp,
   Eye, EyeOff, FileCheck2, LayoutDashboard, LockKeyhole, Mail, MessageSquareText, Search, ShieldCheck,
@@ -19,10 +20,10 @@ const features = [
 ]
 
 function Brand({ compact = false }: { compact?: boolean }) {
-  return <a className="public-brand" href="/" aria-label="SupportIQ home">
+  return <Link className="public-brand" to="/" aria-label="SupportIQ home">
     <span className="public-brand-mark"><Sparkles size={18} strokeWidth={1.8} /></span>
     {!compact && <span><strong>SupportIQ</strong><small>AI</small></span>}
-  </a>
+  </Link>
 }
 
 function PublicNav() {
@@ -30,13 +31,13 @@ function PublicNav() {
     <div className="public-header-inner">
       <Brand />
       <nav className="public-nav-links" aria-label="Main navigation">
-        <a href="/#features">Features</a>
-        <a href="/#how-it-works">How it works</a>
-        <a href="/#about">About</a>
+        <Link to="/#features">Features</Link>
+        <Link to="/#how-it-works">How it works</Link>
+        <Link to="/#about">About</Link>
       </nav>
       <div className="public-nav-actions">
-        <a className="public-login-link" href="/login">Log in</a>
-        <a className="public-button public-button-small" href="/signup">Get started <ArrowUpRight size={15} /></a>
+        <Link className="public-login-link" to="/login">Log in</Link>
+        <Link className="public-button public-button-small" to="/signup">Get started <ArrowUpRight size={15} /></Link>
       </div>
     </div>
   </header>
@@ -80,7 +81,7 @@ export function LandingPage() {
           <div className="hero-kicker"><span></span> SUPPORT KNOWLEDGE, MADE USEFUL</div>
           <h1>Customer support powered by knowledge, <span>not guesswork.</span></h1>
           <p>Help customers find reliable answers through AI grounded in your organization's verified knowledge.</p>
-          <div className="hero-actions"><a className="public-button" href="/signup">Get started <ArrowRight size={16} /></a><a className="public-button-secondary" href="#features">Explore features <ArrowDown size={15} /></a></div>
+          <div className="hero-actions"><Link className="public-button" to="/signup">Get started <ArrowRight size={16} /></Link><a className="public-button-secondary" href="#features">Explore features <ArrowDown size={15} /></a></div>
           <div className="hero-assurance"><ShieldCheck size={15} /> Answers reference your published support content</div>
         </div>
         <ProductPreview />
@@ -100,17 +101,17 @@ export function LandingPage() {
       </section>
 
       <section className="about-section public-section" id="about">
-        <div className="about-mark"><Sparkles size={21} /></div><div><span className="section-eyebrow">ABOUT SUPPORTIQ</span><h2>Clear answers start with<br />trusted knowledge.</h2><p>SupportIQ is a customer-support intelligence workspace designed to connect helpful answers with the knowledge behind them.</p></div><a className="about-link" href="/signup">Explore SupportIQ <ArrowUpRight size={16} /></a>
+        <div className="about-mark"><Sparkles size={21} /></div><div><span className="section-eyebrow">ABOUT SUPPORTIQ</span><h2>Clear answers start with<br />trusted knowledge.</h2><p>SupportIQ is a customer-support intelligence workspace designed to connect helpful answers with the knowledge behind them.</p></div><Link className="about-link" to="/signup">Explore SupportIQ <ArrowUpRight size={16} /></Link>
       </section>
 
-      <section className="closing-section"><div><span className="section-eyebrow">SUPPORT, WITH MORE CLARITY</span><h2>Make your knowledge<br />easier to put to work.</h2></div><a className="public-button" href="/signup">Get started <ArrowRight size={16} /></a></section>
+      <section className="closing-section"><div><span className="section-eyebrow">SUPPORT, WITH MORE CLARITY</span><h2>Make your knowledge<br />easier to put to work.</h2></div><Link className="public-button" to="/signup">Get started <ArrowRight size={16} /></Link></section>
     </main>
     <PublicFooter />
   </div>
 }
 
 function PublicFooter() {
-  return <footer className="public-footer"><div className="footer-main"><div className="footer-brand"><Brand /><p>AI-powered customer support intelligence.</p></div><div className="footer-links"><div><strong>Product</strong><a href="/#features">Features</a><a href="/#how-it-works">How it works</a><a href="/#about">About</a></div><div><strong>Account</strong><a href="/login">Log in</a><a href="/signup">Sign up</a></div><div><strong>Information</strong><a href="/privacy">Privacy Policy <span>Placeholder</span></a><a href="/terms">Terms and Conditions <span>Placeholder</span></a></div></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} SupportIQ AI</span><span>Legal pages are placeholders and require review before publication.</span></div></footer>
+  return <footer className="public-footer"><div className="footer-main"><div className="footer-brand"><Brand /><p>AI-powered customer support intelligence.</p></div><div className="footer-links"><div><strong>Product</strong><Link to="/#features">Features</Link><Link to="/#how-it-works">How it works</Link><Link to="/#about">About</Link></div><div><strong>Account</strong><Link to="/login">Log in</Link><Link to="/signup">Sign up</Link></div><div><strong>Information</strong><Link to="/privacy">Privacy Policy <span>Placeholder</span></Link><Link to="/terms">Terms and Conditions <span>Placeholder</span></Link></div></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} SupportIQ AI</span><span>Legal pages are placeholders and require review before publication.</span></div></footer>
 }
 
 function EyeToggle({ visible, onClick, id }: { visible: boolean; onClick: () => void; id: string }) {
@@ -118,10 +119,11 @@ function EyeToggle({ visible, onClick, id }: { visible: boolean; onClick: () => 
 }
 
 function AuthShell({ title, intro, children, footer }: { title: string; intro: string; children: ReactNode; footer: ReactNode }) {
-  return <div className="auth-page"><div className="auth-top"><Brand /><a href="/">Back to home <ArrowUpRight size={14} /></a></div><main className="auth-card"><div className="auth-card-mark"><Sparkles size={19} /></div><h1>{title}</h1><p className="auth-intro">{intro}</p>{children}<div className="auth-card-footer">{footer}</div></main><p className="auth-security"><LockKeyhole size={13} /> Your account is secured by Supabase authentication.</p></div>
+  return <div className="auth-page"><div className="auth-top"><Brand /><Link to="/">Back to home <ArrowUpRight size={14} /></Link></div><main className="auth-card"><div className="auth-card-mark"><Sparkles size={19} /></div><h1>{title}</h1><p className="auth-intro">{intro}</p>{children}<div className="auth-card-footer">{footer}</div></main><p className="auth-security"><LockKeyhole size={13} /> Your account is secured by Supabase authentication.</p></div>
 }
 
 export function AuthPage({ mode }: { mode: AuthMode }) {
+  const navigate = useNavigate()
   const { user, initializationError, signIn, signUp, requestPasswordReset, updatePassword } = useAuth()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -137,6 +139,10 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
   const isReset = mode === 'reset-password'
   const title = isSignup ? 'Create your account' : isReset || isForgot ? 'Reset your password' : 'Welcome back'
   const intro = isSignup ? 'Set up your SupportIQ workspace account.' : isReset ? 'Choose a new password for your account.' : isForgot ? 'Enter your email and we’ll send a secure reset link.' : 'Sign in to continue to your support workspace.'
+
+  useEffect(() => {
+    if (user && (mode === 'login' || mode === 'signup')) navigate('/dashboard', { replace: true })
+  }, [mode, navigate, user])
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -167,13 +173,13 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
         if (result.user?.identities?.length === 0) {
           setError('An account may already exist for this email. Try signing in instead.')
         } else if (result.session) {
-          window.location.assign('/app')
+          navigate('/dashboard', { replace: true })
         } else {
           setSuccess('Your account is registered. Check your email for a verification link before signing in.')
         }
       } else {
         await signIn(normalizedEmail, password)
-        window.location.assign('/app')
+        navigate('/dashboard', { replace: true })
       }
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : 'Something went wrong. Please try again.')
@@ -182,19 +188,19 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
     }
   }
 
-  const footer = isSignup ? <>Already have an account? <a href="/login">Log in</a></> : isForgot || isReset ? <>Remember your password? <a href="/login">Back to login</a></> : <>New to SupportIQ? <a href="/signup">Create an account</a></>
+  const footer = isSignup ? <>Already have an account? <Link to="/login">Log in</Link></> : isForgot || isReset ? <>Remember your password? <Link to="/login">Back to login</Link></> : <>New to SupportIQ? <Link to="/signup">Create an account</Link></>
 
   return <AuthShell title={title} intro={intro} footer={footer}>
     {initializationError && <div className="auth-alert auth-error" role="alert">{initializationError}</div>}
     {!supabase && <div className="auth-alert auth-setup" role="status">Authentication is unavailable until Supabase is configured. You can still explore the demo workspace.</div>}
     {isReset && !user && <div className="auth-alert auth-setup" role="status">Open the password reset link sent to your email to continue.</div>}
-    {success ? <div className="auth-success" role="status"><span><Check size={17} /></span><p>{success}</p>{isForgot ? <a href="/login">Return to login <ArrowRight size={14} /></a> : isReset && <a href="/app">Continue to workspace <ArrowRight size={14} /></a>}</div> :
+    {success ? <div className="auth-success" role="status"><span><Check size={17} /></span><p>{success}</p>{isForgot ? <Link to="/login">Return to login <ArrowRight size={14} /></Link> : isReset && <Link to="/dashboard">Continue to workspace <ArrowRight size={14} /></Link>}</div> :
       <form className="auth-form" onSubmit={submit} noValidate>
         {isSignup && <label className="auth-field"><span>Full name</span><input autoComplete="name" value={name} onChange={event => setName(event.target.value)} placeholder="Your name" required disabled={submitting} /></label>}
         {!isReset && <label className="auth-field"><span>Email address</span><span className="auth-input-wrap"><Mail size={16} /><input type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} placeholder="you@company.com" required disabled={submitting} /></span></label>}
         {!isForgot && <label className="auth-field"><span>Password</span><span className="auth-input-wrap"><LockKeyhole size={16} /><input id="auth-password" type={showPassword ? 'text' : 'password'} autoComplete={isSignup || isReset ? 'new-password' : 'current-password'} value={password} onChange={event => setPassword(event.target.value)} placeholder={isSignup || isReset ? 'At least 10 characters' : 'Enter your password'} required disabled={submitting || (isReset && !user)} /><EyeToggle visible={showPassword} onClick={() => setShowPassword(value => !value)} id="auth-password" /></span>{(isSignup || isReset) && <small>At least 10 characters, with uppercase, lowercase, and a number.</small>}</label>}
         {(isSignup || isReset) && <label className="auth-field"><span>Confirm password</span><span className="auth-input-wrap"><LockKeyhole size={16} /><input id="auth-confirm-password" type={showConfirmation ? 'text' : 'password'} autoComplete="new-password" value={confirmation} onChange={event => setConfirmation(event.target.value)} placeholder="Re-enter your password" required disabled={submitting || (isReset && !user)} /><EyeToggle visible={showConfirmation} onClick={() => setShowConfirmation(value => !value)} id="auth-confirm-password" /></span></label>}
-        {!isSignup && !isForgot && !isReset && supabase && <div className="auth-form-options"><span></span><a href="/forgot-password">Forgot password?</a></div>}
+        {!isSignup && !isForgot && !isReset && supabase && <div className="auth-form-options"><span></span><Link to="/forgot-password">Forgot password?</Link></div>}
         {error && <div className="auth-alert auth-error" role="alert"><X size={15} /> {error}</div>}
         <button className="public-button auth-submit" type="submit" disabled={submitting || (isReset && !user)}>{submitting ? <><span className="auth-spinner"></span> Please wait…</> : isSignup ? 'Create account' : isForgot ? 'Send reset link' : isReset ? 'Update password' : 'Log in'} {!submitting && <ArrowRight size={16} />}</button>
       </form>}
@@ -204,5 +210,5 @@ export function AuthPage({ mode }: { mode: AuthMode }) {
 
 export function LegalPlaceholder({ page }: { page: 'privacy' | 'terms' }) {
   const title = page === 'privacy' ? 'Privacy Policy' : 'Terms and Conditions'
-  return <div className="public-site"><PublicNav /><main className="legal-placeholder"><span className="section-eyebrow">SUPPORTIQ AI · {title.toUpperCase()}</span><div className="legal-review-label"><X size={15} /> Placeholder — requires final legal review</div><h1>{title}</h1><p>This page is a placeholder and does not describe finalized {page === 'privacy' ? 'privacy practices' : 'terms of service'}. It must be reviewed and replaced with organization-approved legal content before this site is published for customers.</p><a className="public-button-secondary" href="/">Return to SupportIQ <ArrowRight size={15} /></a></main><PublicFooter /></div>
+  return <div className="public-site"><PublicNav /><main className="legal-placeholder"><span className="section-eyebrow">SUPPORTIQ AI · {title.toUpperCase()}</span><div className="legal-review-label"><X size={15} /> Placeholder — requires final legal review</div><h1>{title}</h1><p>This page is a placeholder and does not describe finalized {page === 'privacy' ? 'privacy practices' : 'terms of service'}. It must be reviewed and replaced with organization-approved legal content before this site is published for customers.</p><Link className="public-button-secondary" to="/">Return to SupportIQ <ArrowRight size={15} /></Link></main><PublicFooter /></div>
 }

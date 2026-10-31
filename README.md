@@ -26,7 +26,8 @@ The project includes a responsive public landing page, optional Supabase email/p
 | `/signup` | Create an account |
 | `/forgot-password` | Request a password reset email |
 | `/reset-password` | Choose a new password from the email link |
-| `/app` | SupportIQ dashboard |
+| `/dashboard` | Protected SupportIQ dashboard |
+| `/app` | Compatibility redirect to `/dashboard` |
 | `/privacy` | Privacy policy placeholder; final legal review required |
 | `/terms` | Terms placeholder; final legal review required |
 
@@ -82,7 +83,7 @@ npm run lint      # Run ESLint
 
 ## Deployment
 
-The Vercel configuration builds with `npm run build` and serves the `dist` output. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the deployment environment if authentication is required. Add the deployed URL to the Supabase redirect allowlist.
+The `render.yaml` blueprint builds the app and rewrites static-site routes to `index.html`, so direct URLs and browser refresh work with React Router. The Vercel configuration also rewrites routes to the SPA entry point. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the deployment environment if authentication is required. Add the deployed URL to the Supabase redirect allowlist.
 
 The `/privacy` and `/terms` pages are clearly identified placeholders, not approved legal documents. Replace them with organization-approved content before making the site available to customers.
 

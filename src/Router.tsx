@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { ArrowUpRight, LoaderCircle } from 'lucide-react'
 import { Dashboard } from './App'
 import { AuthProvider } from './AuthContext'
@@ -7,41 +7,39 @@ import { AuthPage, LandingPage, LegalPlaceholder } from './PublicPages'
 import { isDemoMode } from './supabase'
 import './public.css'
 
-function RouteContent() {
-  const [path, setPath] = useState(window.location.pathname.replace(/\/+$/, '') || '/')
+function ProtectedDashboard() {
   const { user, loading } = useAuth()
+  const location = useLocation()
 
-  useEffect(() => {
-    const updatePath = () => setPath(window.location.pathname.replace(/\/+$/, '') || '/')
-    window.addEventListener('popstate', updatePath)
-    return () => window.removeEventListener('popstate', updatePath)
-  }, [])
-
-  useEffect(() => {
-    if (loading) return
-    if (path === '/app' && !user && !isDemoMode) {
-      window.history.replaceState(null, '', '/login')
-      setPath('/login')
-    } else if ((path === '/login' || path === '/signup') && user) {
-      window.history.replaceState(null, '', '/app')
-      setPath('/app')
-    }
-  }, [path, user, loading])
-
-  if (path === '/app') {
-    if (loading && !isDemoMode) return <div className="route-loading" role="status"><LoaderCircle className="route-spinner" size={22} /> Restoring your session…</div>
-    if (!user && !isDemoMode) return <div className="route-loading"><a href="/login">Continue to login <ArrowUpRight size={15} /></a></div>
-    return <Dashboard />
+  if (loading && !isDemoMode) {
+    return <div className="route-loading" role="status"><LoaderCircle className="route-spinner" size={22} /> Restoring your session…</div>
   }
-  if (path === '/login') return <AuthPage mode="login" />
-  if (path === '/signup') return <AuthPage mode="signup" />
-  if (path === '/forgot-password') return <AuthPage mode="forgot-password" />
-  if (path === '/reset-password') return <AuthPage mode="reset-password" />
-  if (path === '/privacy') return <LegalPlaceholder page="privacy" />
-  if (path === '/terms') return <LegalPlaceholder page="terms" />
-  return <LandingPage />
+  if (!user && !isDemoMode) {
+    return <Navigate to="/login" replace state={{ from: location }} />
+  }
+  return <Dashboard />
+}
+
+function NotFound() {
+  return <main className="route-loading"><div><h1>Page not found</h1><p>This page doesn’t exist.</p><Link to="/">Return to SupportIQ <ArrowUpRight size={15} /></Link></div></main>
+}
+
+function AppRoutes() {
+  return <Routes>
+    <Route path="/" element={<LandingPage />} />
+    <Route path="/login" element={<AuthPage mode="login" />} />
+    <Route path="/signup" element={<AuthPage mode="signup" />} />
+    <Route path="/forgot-password" element={<AuthPage mode="forgot-password" />} />
+    <Route path="/reset-password" element={<AuthPage mode="reset-password" />} />
+    <Route path="/dashboard" element={<ProtectedDashboard />} />
+    <Route path="/app" element={<Navigate to="/dashboard" replace />} />
+    <Route path="/index.html" element={<Navigate to="/" replace />} />
+    <Route path="/privacy" element={<LegalPlaceholder page="privacy" />} />
+    <Route path="/terms" element={<LegalPlaceholder page="terms" />} />
+    <Route path="*" element={<NotFound />} />
+  </Routes>
 }
 
 export default function App() {
-  return <AuthProvider><RouteContent /></AuthProvider>
+  return <BrowserRouter><AuthProvider><AppRoutes /></AuthProvider></BrowserRouter>
 }
